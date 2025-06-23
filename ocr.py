@@ -1,16 +1,14 @@
-import os
 import time
 import sys
 from PIL import Image
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from msrest.authentication import CognitiveServicesCredentials
 
-def lire_texte_azure(image_path):
-    endpoint = os.getenv("AZURE_OCR_ENDPOINT")
-    key = os.getenv("AZURE_OCR_KEY")
+# Configuration directement dans le code
+AZURE_OCR_ENDPOINT = "https://ocr-main.cognitiveservices.azure.com/"
+AZURE_OCR_KEY = "9YvfQeXOHJoI4al7dKKvEGBHma1LiQnew6P4k93t21K90Bjr3or5JQQJ99BFAC5T7U2XJ3w3AAAFACOGqTP6"
 
-    if not endpoint or not key:
-        return "Clé ou endpoint Azure manquant. Vérifiez les variables d'environnement."
+def lire_texte_azure(image_path):
 
     def clean_and_resize_image(input_path, max_size=4000):
         with Image.open(input_path) as img:
@@ -31,7 +29,7 @@ def lire_texte_azure(image_path):
     try:
         cleaned_path = clean_and_resize_image(image_path)
         with open(cleaned_path, "rb") as image_stream:
-            client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(key))
+            client = ComputerVisionClient(AZURE_OCR_ENDPOINT, CognitiveServicesCredentials(AZURE_OCR_KEY))
             read_op = client.read_in_stream(image_stream, raw=True)
             operation_id = read_op.headers["Operation-Location"].split("/")[-1]
 
