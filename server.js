@@ -10,8 +10,8 @@ const app = express();
 utiise dans notre code*/
 const PORT = process.env.PORT;//Port sur lequel Render écoute les requêtes
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN; //Token whatsApp API
-const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID;//ID du numéro associé à l'API WhatsApp
-const DEEPL_API_KEY = process.env.DEEPL_API_KEY; // Clé API DeepL
+const PHONE_NUMBER_ID = "671376889387505";
+const DEEPL_API_KEY = "5781c32d-6de0-4c96-8636-423c8473729c:fx";
 const VERIFY_TOKEN = "Mon_Token";
 
 app.use(express.json()); // Permet de lire automatiquement le corps JSON des requêtes
@@ -73,8 +73,7 @@ app.post("/webhook", async (req, res) => {
       await waitForStreamFinish(writer);
 
       // execution de l'OCR en lui donnant le chemin d'accès à l'image
-      const { stdout, stderr } = await execPromise(`python3 ocr.py ${imagePath}`, { env: { ...process.env },
-});
+      const { stdout, stderr } = await execPromise(`python3 ocr.py ${imagePath}`);
 
       if (stderr) {
         console.error("Erreur OCR :", stderr);
